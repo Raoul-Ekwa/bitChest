@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Form;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
+class BuyTransactionType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('quantity', NumberType::class, [
+                'label' => 'Quantity',
+                'scale' => 8,
+                'html5' => true,
+                'attr' => [
+                    'step' => '0.00000001',
+                    'min' => '0.00000001',
+                    'placeholder' => '0.00000000',
+                ],
+                'constraints' => [
+                    new NotBlank(['message' => 'Please enter a quantity.']),
+                    new GreaterThan([
+                        'value' => 0,
+                        'message' => 'Quantity must be greater than 0.',
+                    ]),
+                ],
+            ]);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([]);
+    }
+}

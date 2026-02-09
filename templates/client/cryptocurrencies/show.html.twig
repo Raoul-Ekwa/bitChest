@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ crypto.name }} - BitChest{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar py-3">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_wallet') }}">
+                            <i class="bi bi-wallet2"></i> My Wallet
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('client_cryptocurrencies') }}">
+                            <i class="bi bi-currency-bitcoin"></i> Cryptocurrencies
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h2 mb-0">{{ crypto.name }} ({{ crypto.symbol }})</h1>
+                    <p class="text-muted mb-0">Current price: <strong class="text-primary">{{ crypto.currentPrice|number_format(2) }} EUR</strong></p>
+                </div>
+                <div>
+                    <a href="{{ path('client_buy', {id: crypto.id}) }}" class="btn btn-success">
+                        <i class="bi bi-cart-plus"></i> Buy
+                    </a>
+                    {% if holding %}
+                        <a href="{{ path('client_sell', {id: crypto.id}) }}" class="btn btn-danger">
+                            <i class="bi bi-cart-dash"></i> Sell
+                        </a>
+                    {% endif %}
+                    <a href="{{ path('client_cryptocurrencies') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Price Info -->
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-graph-up"></i> Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless mb-0">
+                                <tr>
+                                    <th>Current price:</th>
+                                    <td class="text-end">{{ crypto.currentPrice|number_format(2) }} EUR</td>
+                                </tr>
+                                <tr>
+                                    <th>24h change:</th>
+                                    <td class="text-end {{ priceChange.percentage >= 0 ? 'text-success' : 'text-danger' }}">
+                                        {{ priceChange.percentage >= 0 ? '+' : '' }}{{ priceChange.percentage }}%
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    {% if holding %}
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0"><i class="bi bi-wallet2"></i> Your Position</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-borderless mb-0">
+                                    <tr>
+                                        <th>Quantity:</th>
+                                        <td class="text-end">{{ holding.quantity|number_format(8) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Avg. price:</th>
+                                        <td class="text-end">{{ holding.averagePurchasePrice|number_format(2) }} EUR</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Value:</th>
+                                        <td class="text-end">{{ holding.totalValue|number_format(2) }} EUR</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Profit/Loss:</th>
+                                        <td class="text-end {{ holding.profitLoss >= 0 ? 'text-success' : 'text-danger' }}">
+                                            {{ holding.profitLoss|number_format(2) }} EUR
+                                            ({{ holding.profitLossPercentage }}%)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Price Chart -->
+                <div class="col-md-8 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-bar-chart-line"></i> Price History (30 days)</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="priceChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('priceChart').getContext('2d');
+    const priceHistory = {{ priceHistory|map(q => {'date': q.createdAt|date('Y-m-d'), 'price': q.price})|json_encode|raw }};
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: priceHistory.map(p => p.date),
+            datasets: [{
+                label: 'Price (EUR)',
+                data: priceHistory.map(p => parseFloat(p.price)),
+                borderColor: '#f7931a',
+                backgroundColor: 'rgba(247, 147, 26, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

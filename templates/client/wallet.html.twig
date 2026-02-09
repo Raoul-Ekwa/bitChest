@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Wallet - BitChest{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar py-3">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('client_wallet') }}">
+                            <i class="bi bi-wallet2"></i> My Wallet
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_cryptocurrencies') }}">
+                            <i class="bi bi-currency-bitcoin"></i> Cryptocurrencies
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_transactions') }}">
+                            <i class="bi bi-clock-history"></i> History
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <h1 class="h2 mb-4">My Wallet</h1>
+
+            <!-- Summary Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card border-primary">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">Available Balance</h6>
+                            <h3 class="text-primary">{{ portfolioSummary.balance|number_format(2) }} EUR</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-success">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">Crypto Value</h6>
+                            <h3 class="text-success">{{ portfolioSummary.portfolioValue|number_format(2) }} EUR</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-{{ portfolioSummary.profitLoss >= 0 ? 'info' : 'danger' }}">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">Profit/Loss</h6>
+                            <h3 class="text-{{ portfolioSummary.profitLoss >= 0 ? 'info' : 'danger' }}">
+                                {{ portfolioSummary.profitLoss|number_format(2) }} EUR
+                            </h3>
+                            <small class="text-muted">({{ portfolioSummary.profitLossPercentage }}%)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card border-warning">
+                        <div class="card-body text-center">
+                            <h6 class="text-muted">Total Value</h6>
+                            <h3 class="text-warning">{{ portfolioSummary.netWorth|number_format(2) }} EUR</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Holdings -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-pie-chart"></i> My Cryptocurrencies</h5>
+                </div>
+                <div class="card-body">
+                    {% if holdings|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Cryptocurrency</th>
+                                        <th>Quantity</th>
+                                        <th>Avg. Purchase Price</th>
+                                        <th>Current Price</th>
+                                        <th>Total Value</th>
+                                        <th>Profit/Loss</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holding in holdings %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ holding.cryptocurrency.symbol }}</strong>
+                                                <small class="text-muted d-block">{{ holding.cryptocurrency.name }}</small>
+                                            </td>
+                                            <td>{{ holding.quantity|number_format(8) }}</td>
+                                            <td>{{ holding.averagePurchasePrice|number_format(2) }} EUR</td>
+                                            <td>{{ holding.cryptocurrency.currentPrice|number_format(2) }} EUR</td>
+                                            <td><strong>{{ holding.totalValue|number_format(2) }} EUR</strong></td>
+                                            <td class="{{ holding.profitLoss >= 0 ? 'text-success' : 'text-danger' }}">
+                                                {{ holding.profitLoss|number_format(2) }} EUR
+                                                <small>({{ holding.profitLossPercentage }}%)</small>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="{{ path('client_buy', {id: holding.cryptocurrency.id}) }}"
+                                                       class="btn btn-outline-success" title="Buy">
+                                                        <i class="bi bi-plus-lg"></i>
+                                                    </a>
+                                                    <a href="{{ path('client_sell', {id: holding.cryptocurrency.id}) }}"
+                                                       class="btn btn-outline-danger" title="Sell">
+                                                        <i class="bi bi-dash-lg"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-wallet2 text-muted" style="font-size: 4rem;"></i>
+                            <p class="text-muted mt-3">You don't own any cryptocurrency yet.</p>
+                            <a href="{{ path('client_cryptocurrencies') }}" class="btn btn-primary">
+                                <i class="bi bi-cart-plus"></i> Buy my first crypto
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ client.fullName }} - BitChest{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar py-3">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('admin_clients') }}">
+                            <i class="bi bi-people"></i> Clients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_cryptocurrencies') }}">
+                            <i class="bi bi-currency-bitcoin"></i> Cryptocurrencies
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2">{{ client.fullName }}</h1>
+                <div>
+                    <a href="{{ path('admin_clients_edit', {id: client.id}) }}" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                    <a href="{{ path('admin_clients') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Client Info -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-person"></i> Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th>Email:</th>
+                                    <td>{{ client.email }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Phone:</th>
+                                    <td>{{ client.phone ?? '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Address:</th>
+                                    <td>{{ client.address ?? '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status:</th>
+                                    <td>
+                                        {% if client.isActive %}
+                                            <span class="badge bg-success">Active</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Registered:</th>
+                                    <td>{{ client.createdAt|date('Y-m-d H:i') }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Summary -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-wallet2"></i> Wallet</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if portfolioSummary %}
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>EUR Balance:</th>
+                                        <td><strong>{{ portfolioSummary.balance|number_format(2) }} EUR</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Crypto Value:</th>
+                                        <td>{{ portfolioSummary.portfolioValue|number_format(2) }} EUR</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Profit/Loss:</th>
+                                        <td class="{{ portfolioSummary.profitLoss >= 0 ? 'text-success' : 'text-danger' }}">
+                                            {{ portfolioSummary.profitLoss|number_format(2) }} EUR
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total Value:</th>
+                                        <td><strong class="text-primary">{{ portfolioSummary.netWorth|number_format(2) }} EUR</strong></td>
+                                    </tr>
+                                </table>
+                            {% else %}
+                                <p class="text-muted mb-0">No wallet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Holdings -->
+            {% if client.wallet and client.wallet.holdings|length > 0 %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-currency-bitcoin"></i> Cryptocurrency Holdings</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Crypto</th>
+                                        <th>Quantity</th>
+                                        <th>Avg. Price</th>
+                                        <th>Current Value</th>
+                                        <th>Profit/Loss</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for holding in client.wallet.holdings %}
+                                        <tr>
+                                            <td><strong>{{ holding.cryptocurrency.symbol }}</strong></td>
+                                            <td>{{ holding.quantity|number_format(8) }}</td>
+                                            <td>{{ holding.averagePurchasePrice|number_format(2) }} EUR</td>
+                                            <td>{{ holding.totalValue|number_format(2) }} EUR</td>
+                                            <td class="{{ holding.profitLoss >= 0 ? 'text-success' : 'text-danger' }}">
+                                                {{ holding.profitLoss|number_format(2) }} EUR
+                                                ({{ holding.profitLossPercentage }}%)
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Recent Transactions -->
+            {% if client.wallet and client.wallet.transactions|length > 0 %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Transactions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Crypto</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for transaction in client.wallet.transactions|slice(0, 10) %}
+                                        <tr>
+                                            <td>{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
+                                            <td>
+                                                {% if transaction.type == 'buy' %}
+                                                    <span class="badge bg-success">Buy</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Sell</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ transaction.cryptocurrency.symbol }}</td>
+                                            <td>{{ transaction.quantity|number_format(8) }}</td>
+                                            <td>{{ transaction.priceAtTransaction|number_format(2) }} EUR</td>
+                                            <td>{{ transaction.totalAmount|number_format(2) }} EUR</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}

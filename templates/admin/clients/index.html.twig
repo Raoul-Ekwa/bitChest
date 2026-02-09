@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Client Management - BitChest{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar py-3">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('admin_clients') }}">
+                            <i class="bi bi-people"></i> Clients
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_cryptocurrencies') }}">
+                            <i class="bi bi-currency-bitcoin"></i> Cryptocurrencies
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_profile') }}">
+                            <i class="bi bi-person"></i> My Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2">Client Management</h1>
+                <a href="{{ path('admin_clients_new') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> New Client
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    {% if clients|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Balance</th>
+                                        <th>Status</th>
+                                        <th>Registered</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for client in clients %}
+                                        <tr>
+                                            <td>{{ client.fullName }}</td>
+                                            <td>{{ client.email }}</td>
+                                            <td>{{ client.phone ?? '-' }}</td>
+                                            <td>{{ client.wallet ? client.wallet.balance|number_format(2) ~ ' EUR' : '-' }}</td>
+                                            <td>
+                                                {% if client.isActive %}
+                                                    <span class="badge bg-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ client.createdAt|date('Y-m-d') }}</td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm">
+                                                    <a href="{{ path('admin_clients_show', {id: client.id}) }}"
+                                                       class="btn btn-outline-info" title="View">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <a href="{{ path('admin_clients_edit', {id: client.id}) }}"
+                                                       class="btn btn-outline-warning" title="Edit">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                    <form action="{{ path('admin_clients_toggle_status', {id: client.id}) }}"
+                                                          method="post" class="d-inline">
+                                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ client.id) }}">
+                                                        <button type="submit" class="btn btn-outline-secondary"
+                                                                title="{{ client.isActive ? 'Deactivate' : 'Activate' }}">
+                                                            <i class="bi bi-{{ client.isActive ? 'pause' : 'play' }}"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">No registered clients.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

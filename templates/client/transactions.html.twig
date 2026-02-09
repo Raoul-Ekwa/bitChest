@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Transaction History - BitChest{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar py-3">
+            <div class="position-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_dashboard') }}">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_wallet') }}">
+                            <i class="bi bi-wallet2"></i> My Wallet
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('client_cryptocurrencies') }}">
+                            <i class="bi bi-currency-bitcoin"></i> Cryptocurrencies
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ path('client_transactions') }}">
+                            <i class="bi bi-clock-history"></i> History
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+            <h1 class="h2 mb-4">Transaction History</h1>
+
+            <div class="card">
+                <div class="card-body">
+                    {% if transactions|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Cryptocurrency</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Total Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for transaction in transactions %}
+                                        <tr>
+                                            <td>{{ transaction.createdAt|date('Y-m-d H:i') }}</td>
+                                            <td>
+                                                {% if transaction.type == 'buy' %}
+                                                    <span class="badge bg-success">
+                                                        <i class="bi bi-arrow-down"></i> Buy
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">
+                                                        <i class="bi bi-arrow-up"></i> Sell
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <strong>{{ transaction.cryptocurrency.symbol }}</strong>
+                                                <small class="text-muted d-block">{{ transaction.cryptocurrency.name }}</small>
+                                            </td>
+                                            <td>{{ transaction.quantity|number_format(8) }}</td>
+                                            <td>{{ transaction.priceAtTransaction|number_format(2) }} EUR</td>
+                                            <td>
+                                                <strong class="{{ transaction.type == 'buy' ? 'text-danger' : 'text-success' }}">
+                                                    {{ transaction.type == 'buy' ? '-' : '+' }}{{ transaction.totalAmount|number_format(2) }} EUR
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="bi bi-clock-history text-muted" style="font-size: 4rem;"></i>
+                            <p class="text-muted mt-3">No transactions yet.</p>
+                            <a href="{{ path('client_cryptocurrencies') }}" class="btn btn-primary">
+                                <i class="bi bi-cart-plus"></i> Make my first transaction
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
