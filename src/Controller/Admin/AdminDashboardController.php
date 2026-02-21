@@ -30,12 +30,4 @@ class AdminDashboardController extends AbstractController
             'recentTransactions' => $recentTransactions,
         ]);
     }
-
-    #[Route('/cryptocurrencies', name: 'admin_cryptocurrencies')]
-    public function cryptocurrencies(CryptocurrencyRepository $cryptoRepository): Response
-    {
-        return $this->render('admin/cryptocurrencies/index.html.twig', [
-            'cryptocurrencies' => $cryptoRepository->findAll(),
-        ]);
-    }
 }

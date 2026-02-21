@@ -35,7 +35,21 @@
 
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-            <h1 class="h2 mb-4">Cryptocurrencies</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h2">Cryptocurrencies</h1>
+                <a href="{{ path('admin_cryptocurrencies_new') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> New Cryptocurrency
+                </a>
+            </div>
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
 
             <div class="card">
                 <div class="card-body">
@@ -47,6 +61,7 @@
                                     <th>Name</th>
                                     <th>Current Price</th>
                                     <th>Date Added</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,6 +71,51 @@
                                         <td>{{ crypto.name }}</td>
                                         <td>{{ crypto.currentPrice|number_format(2) }} EUR</td>
                                         <td>{{ crypto.createdAt|date('Y-m-d') }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{{ path('admin_cryptocurrencies_show', {id: crypto.id}) }}"
+                                                   class="btn btn-outline-info" title="View">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="{{ path('admin_cryptocurrencies_edit', {id: crypto.id}) }}"
+                                                   class="btn btn-outline-warning" title="Edit">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-outline-danger" title="Delete"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#deleteModal{{ crypto.id }}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+
+                                            <!-- Delete confirmation modal -->
+                                            <div class="modal fade" id="deleteModal{{ crypto.id }}" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Confirm Deletion</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are you sure you want to delete <strong>{{ crypto.name }} ({{ crypto.symbol }})</strong>?
+                                                            This action cannot be undone.
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            <form action="{{ path('admin_cryptocurrencies_delete', {id: crypto.id}) }}"
+                                                                  method="post" class="d-inline">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ crypto.id) }}">
+                                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-muted">No cryptocurrencies found.</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
