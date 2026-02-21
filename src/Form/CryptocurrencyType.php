@@ -18,6 +18,7 @@ class CryptocurrencyType extends AbstractType
         $builder
             ->add('symbol', TextType::class, [
                 'label' => 'Symbol',
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank(message: 'Please enter a symbol.'),
                     new Length(max: 10),
@@ -25,6 +26,7 @@ class CryptocurrencyType extends AbstractType
             ])
             ->add('name', TextType::class, [
                 'label' => 'Name',
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank(message: 'Please enter a name.'),
                     new Length(max: 100),
@@ -32,6 +34,7 @@ class CryptocurrencyType extends AbstractType
             ])
             ->add('currentPrice', TextType::class, [
                 'label' => 'Current Price (EUR)',
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank(message: 'Please enter a price.'),
                     new Regex(
