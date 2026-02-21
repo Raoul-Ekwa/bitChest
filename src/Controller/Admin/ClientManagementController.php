@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -46,8 +45,9 @@ class ClientManagementController extends AbstractController
             $temporaryPassword = $passwordGenerator->generateTemporaryPassword();
             $client->setPassword($passwordHasher->hashPassword($client, $temporaryPassword));
 
-            // Create wallet for new client
+            // Create wallet for new client with initial balance of 500€
             $wallet = new Wallet();
+            $wallet->setBalance('500.00');
             $wallet->setClient($client);
             $client->setWallet($wallet);
 
@@ -92,19 +92,12 @@ class ClientManagementController extends AbstractController
     public function edit(
         Request $request,
         Client $client,
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
+        EntityManagerInterface $entityManager
     ): Response {
-        $form = $this->createForm(ClientType::class, $client, ['is_edit' => true]);
+        $form = $this->createForm(ClientType::class, $client);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plainPassword = $form->get('plainPassword')->getData();
-
-            if ($plainPassword) {
-                $client->setPassword($passwordHasher->hashPassword($client, $plainPassword));
-            }
-
             $client->setUpdatedAt(new \DateTimeImmutable());
             $entityManager->flush();
 

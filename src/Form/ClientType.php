@@ -6,8 +6,6 @@ use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,9 +19,6 @@ class ClientType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $isEdit = $options['is_edit'];
-        $isCreation = $options['is_creation'];
-
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Email',
@@ -59,38 +54,12 @@ class ClientType extends AbstractType
                 'required' => false,
             ]);
 
-        // Only add password field for editing (creation uses auto-generated password)
-        if ($isEdit) {
-            $builder->add('plainPassword', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'mapped' => false,
-                'required' => false,
-                'first_options' => [
-                    'label' => 'New Password',
-                    'attr' => ['autocomplete' => 'new-password'],
-                    'help' => 'Leave blank to keep current password',
-                ],
-                'second_options' => [
-                    'label' => 'Confirm Password',
-                    'attr' => ['autocomplete' => 'new-password'],
-                ],
-                'invalid_message' => 'The passwords do not match.',
-                'constraints' => [
-                    new Length([
-                        'min' => 6,
-                        'max' => 4096,
-                        'minMessage' => 'Password must be at least {{ limit }} characters.',
-                    ]),
-                ],
-            ]);
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Client::class,
-            'is_edit' => false,
             'is_creation' => false,
         ]);
     }
