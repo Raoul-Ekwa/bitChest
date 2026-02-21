@@ -3,6 +3,7 @@
 namespace App\Controller\Client;
 
 use App\Entity\Client;
+use App\Repository\TransactionRepository;
 use App\Service\TransactionService;
 use App\Service\WalletService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class WalletController extends AbstractController
 {
     #[Route('', name: 'client_wallet')]
-    public function index(WalletService $walletService): Response
+    public function index(WalletService $walletService, TransactionRepository $transactionRepository): Response
     {
         /** @var Client $client */
         $client = $this->getUser();
@@ -23,11 +24,13 @@ class WalletController extends AbstractController
 
         $portfolioSummary = $walletService->getPortfolioSummary($wallet);
         $holdings = $walletService->getAllHoldings($wallet);
+        $buyTransactionsByCrypto = $transactionRepository->findBuyTransactionsByWalletGroupedByCrypto($wallet);
 
         return $this->render('client/wallet.html.twig', [
             'wallet' => $wallet,
             'portfolioSummary' => $portfolioSummary,
             'holdings' => $holdings,
+            'buyTransactionsByCrypto' => $buyTransactionsByCrypto,
         ]);
     }
 

@@ -36,4 +36,24 @@ class TransactionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findBuyTransactionsByWalletGroupedByCrypto(Wallet $wallet): array
+    {
+        $transactions = $this->createQueryBuilder('t')
+            ->where('t.wallet = :wallet')
+            ->andWhere('t.type = :type')
+            ->setParameter('wallet', $wallet)
+            ->setParameter('type', 'buy')
+            ->orderBy('t.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        $grouped = [];
+        foreach ($transactions as $transaction) {
+            $cryptoId = $transaction->getCryptocurrency()->getId();
+            $grouped[$cryptoId][] = $transaction;
+        }
+
+        return $grouped;
+    }
 }

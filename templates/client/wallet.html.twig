@@ -98,10 +98,20 @@
                                 </thead>
                                 <tbody>
                                     {% for holding in holdings %}
+                                        {% set cryptoId = holding.cryptocurrency.id %}
+                                        {% set purchases = buyTransactionsByCrypto[cryptoId] ?? [] %}
                                         <tr>
                                             <td>
                                                 <strong>{{ holding.cryptocurrency.symbol }}</strong>
                                                 <small class="text-muted d-block">{{ holding.cryptocurrency.name }}</small>
+                                                {% if purchases|length > 0 %}
+                                                    <button class="btn btn-link btn-sm p-0 mt-1"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#purchases-{{ cryptoId }}">
+                                                        <small><i class="bi bi-list-ul"></i> {{ purchases|length }} purchase{{ purchases|length > 1 ? 's' : '' }}</small>
+                                                    </button>
+                                                {% endif %}
                                             </td>
                                             <td>{{ holding.quantity|number_format(8) }}</td>
                                             <td>{{ holding.averagePurchasePrice|number_format(2) }} EUR</td>
@@ -113,17 +123,46 @@
                                             </td>
                                             <td>
                                                 <div class="btn-group btn-group-sm">
-                                                    <a href="{{ path('client_buy', {id: holding.cryptocurrency.id}) }}"
+                                                    <a href="{{ path('client_buy', {id: cryptoId}) }}"
                                                        class="btn btn-outline-success" title="Buy">
                                                         <i class="bi bi-plus-lg"></i>
                                                     </a>
-                                                    <a href="{{ path('client_sell', {id: holding.cryptocurrency.id}) }}"
+                                                    <a href="{{ path('client_sell', {id: cryptoId}) }}"
                                                        class="btn btn-outline-danger" title="Sell">
                                                         <i class="bi bi-dash-lg"></i>
                                                     </a>
                                                 </div>
                                             </td>
                                         </tr>
+                                        {% if purchases|length > 0 %}
+                                            <tr class="collapse" id="purchases-{{ cryptoId }}">
+                                                <td colspan="7" class="p-0">
+                                                    <div class="bg-light px-4 py-2">
+                                                        <small class="text-muted fw-semibold">Purchase history</small>
+                                                        <table class="table table-sm table-borderless mb-0 mt-1">
+                                                            <thead>
+                                                                <tr class="text-muted">
+                                                                    <th><small>Date</small></th>
+                                                                    <th><small>Quantity</small></th>
+                                                                    <th><small>Unit price</small></th>
+                                                                    <th><small>Total</small></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for purchase in purchases %}
+                                                                    <tr>
+                                                                        <td><small>{{ purchase.createdAt|date('Y-m-d H:i') }}</small></td>
+                                                                        <td><small>{{ purchase.quantity|number_format(8) }}</small></td>
+                                                                        <td><small>{{ purchase.priceAtTransaction|number_format(2) }} EUR</small></td>
+                                                                        <td><small class="text-danger">-{{ purchase.totalAmount|number_format(2) }} EUR</small></td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
                                     {% endfor %}
                                 </tbody>
                             </table>
