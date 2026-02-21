@@ -27,7 +27,7 @@ class TransactionControllerTest extends WebTestCase
     public function testClientDashboardRedirectsToLoginWhenUnauthenticated(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/client/dashboard');
+        $client->request('GET', '/client');
 
         $this->assertResponseRedirects('/login');
     }
@@ -35,7 +35,7 @@ class TransactionControllerTest extends WebTestCase
     public function testAdminDashboardRedirectsToLoginWhenUnauthenticated(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/admin/dashboard');
+        $client->request('GET', '/admin');
 
         $this->assertResponseRedirects('/login');
     }
@@ -59,7 +59,7 @@ class TransactionControllerTest extends WebTestCase
     public function testClientTransactionsRedirectsToLoginWhenUnauthenticated(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/client/transactions');
+        $client->request('GET', '/client/wallet/transactions');
 
         $this->assertResponseRedirects('/login');
     }

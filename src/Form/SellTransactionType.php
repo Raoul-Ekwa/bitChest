@@ -28,15 +28,12 @@ class SellTransactionType extends AbstractType
                     'placeholder' => '0.00000000',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter a quantity.']),
-                    new GreaterThan([
-                        'value' => 0,
-                        'message' => 'Quantity must be greater than 0.',
-                    ]),
-                    new LessThanOrEqual([
-                        'value' => (float) $maxQuantity,
-                        'message' => 'You cannot sell more than {{ compared_value }} units.',
-                    ]),
+                    new NotBlank(message: 'Please enter a quantity.'),
+                    new GreaterThan(value: 0, message: 'Quantity must be greater than 0.'),
+                    new LessThanOrEqual(
+                        value: (float) $maxQuantity,
+                        message: 'You cannot sell more than {{ compared_value }} units.',
+                    ),
                 ],
             ]);
     }

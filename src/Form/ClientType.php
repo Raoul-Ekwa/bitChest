@@ -23,22 +23,22 @@ class ClientType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter an email.']),
-                    new Email(['message' => 'Please enter a valid email.']),
+                    new NotBlank(message: 'Please enter an email.'),
+                    new Email(message: 'Please enter a valid email.'),
                 ],
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'First Name',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter a first name.']),
-                    new Length(['min' => 2, 'max' => 100]),
+                    new NotBlank(message: 'Please enter a first name.'),
+                    new Length(min: 2, max: 100),
                 ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Last Name',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter a last name.']),
-                    new Length(['min' => 2, 'max' => 100]),
+                    new NotBlank(message: 'Please enter a last name.'),
+                    new Length(min: 2, max: 100),
                 ],
             ])
             ->add('phone', TelType::class, [

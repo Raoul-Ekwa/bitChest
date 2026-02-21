@@ -24,11 +24,8 @@ class BuyTransactionType extends AbstractType
                     'placeholder' => '0.00000000',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter a quantity.']),
-                    new GreaterThan([
-                        'value' => 0,
-                        'message' => 'Quantity must be greater than 0.',
-                    ]),
+                    new NotBlank(message: 'Please enter a quantity.'),
+                    new GreaterThan(value: 0, message: 'Quantity must be greater than 0.'),
                 ],
             ]);
     }

@@ -22,32 +22,32 @@ class RegistrationType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your email.']),
-                    new Email(['message' => 'Please enter a valid email.']),
+                    new NotBlank(message: 'Please enter your email.'),
+                    new Email(message: 'Please enter a valid email.'),
                 ],
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'First Name',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your first name.']),
-                    new Length([
-                        'min' => 2,
-                        'max' => 100,
-                        'minMessage' => 'First name must be at least {{ limit }} characters.',
-                        'maxMessage' => 'First name cannot exceed {{ limit }} characters.',
-                    ]),
+                    new NotBlank(message: 'Please enter your first name.'),
+                    new Length(
+                        min: 2,
+                        max: 100,
+                        minMessage: 'First name must be at least {{ limit }} characters.',
+                        maxMessage: 'First name cannot exceed {{ limit }} characters.',
+                    ),
                 ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Last Name',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your last name.']),
-                    new Length([
-                        'min' => 2,
-                        'max' => 100,
-                        'minMessage' => 'Last name must be at least {{ limit }} characters.',
-                        'maxMessage' => 'Last name cannot exceed {{ limit }} characters.',
-                    ]),
+                    new NotBlank(message: 'Please enter your last name.'),
+                    new Length(
+                        min: 2,
+                        max: 100,
+                        minMessage: 'Last name must be at least {{ limit }} characters.',
+                        maxMessage: 'Last name cannot exceed {{ limit }} characters.',
+                    ),
                 ],
             ])
             ->add('plainPassword', RepeatedType::class, [
@@ -63,12 +63,12 @@ class RegistrationType extends AbstractType
                 ],
                 'invalid_message' => 'The passwords do not match.',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter a password.']),
-                    new Length([
-                        'min' => 6,
-                        'max' => 4096,
-                        'minMessage' => 'Password must be at least {{ limit }} characters.',
-                    ]),
+                    new NotBlank(message: 'Please enter a password.'),
+                    new Length(
+                        min: 6,
+                        max: 4096,
+                        minMessage: 'Password must be at least {{ limit }} characters.',
+                    ),
                 ],
             ]);
     }

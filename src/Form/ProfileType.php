@@ -22,28 +22,22 @@ class ProfileType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your email.']),
-                    new Email(['message' => 'Please enter a valid email.']),
+                    new NotBlank(message: 'Please enter your email.'),
+                    new Email(message: 'Please enter a valid email.'),
                 ],
             ])
             ->add('firstName', TextType::class, [
                 'label' => 'First Name',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your first name.']),
-                    new Length([
-                        'min' => 2,
-                        'max' => 100,
-                    ]),
+                    new NotBlank(message: 'Please enter your first name.'),
+                    new Length(min: 2, max: 100),
                 ],
             ])
             ->add('lastName', TextType::class, [
                 'label' => 'Last Name',
                 'constraints' => [
-                    new NotBlank(['message' => 'Please enter your last name.']),
-                    new Length([
-                        'min' => 2,
-                        'max' => 100,
-                    ]),
+                    new NotBlank(message: 'Please enter your last name.'),
+                    new Length(min: 2, max: 100),
                 ],
             ])
             ->add('plainPassword', RepeatedType::class, [
@@ -60,11 +54,11 @@ class ProfileType extends AbstractType
                 ],
                 'invalid_message' => 'The passwords do not match.',
                 'constraints' => [
-                    new Length([
-                        'min' => 6,
-                        'max' => 4096,
-                        'minMessage' => 'Password must be at least {{ limit }} characters.',
-                    ]),
+                    new Length(
+                        min: 6,
+                        max: 4096,
+                        minMessage: 'Password must be at least {{ limit }} characters.',
+                    ),
                 ],
             ]);
     }
