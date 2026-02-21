@@ -3,15 +3,18 @@
 ## 1. Reformulation de la demande client
 
 ### Contexte
-BitChest est une startup fondée par Jérôme, ancien trader passionné par les crypto-monnaies. L'objectif est de développer une plateforme d'achat et de vente de crypto-monnaies destinée à être commercialisée en marque blanche auprès d'entreprises financières.
+
+BitChest est une startup fondée par Martin, ancien trader passionné par les crypto-monnaies. L'objectif est de développer une plateforme d'achat et de vente de crypto-monnaies destinée à être commercialisée en marque blanche auprès d'entreprises financières.
 
 ### Objectifs du projet
+
 - Développer un prototype fonctionnel de plateforme d'échange de crypto-monnaies
 - Permettre aux particuliers d'acheter et vendre des crypto-monnaies
 - Offrir une interface d'administration pour la gestion des clients
 - Fournir une application responsive (mobile, tablette, desktop)
 
 ### Utilisateurs cibles
+
 1. **Administrateurs** : Agents BitChest gérant la plateforme
 2. **Clients** : Particuliers souhaitant investir dans les crypto-monnaies
 
@@ -52,6 +55,7 @@ BitChest est une startup fondée par Jérôme, ancien trader passionné par les 
 ### 3.2 Wireframes
 
 #### Page de connexion
+
 ```
 ┌─────────────────────────────────────┐
 │           BitChest Logo             │
@@ -72,6 +76,7 @@ BitChest est une startup fondée par Jérôme, ancien trader passionné par les 
 ```
 
 #### Dashboard Client
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  Balance: €XXX.XX                         [User] [Logout]   │
@@ -137,33 +142,33 @@ BitChest est une startup fondée par Jérôme, ancien trader passionné par les 
 
 ### 4.1 Fonctionnalités Administrateur
 
-| ID | Fonctionnalité | Description | Priorité |
-|----|----------------|-------------|----------|
-| A01 | Authentification | Connexion sécurisée avec email/mot de passe | Haute |
-| A02 | Tableau de bord | Vue d'ensemble des statistiques | Haute |
-| A03 | Gestion profil | Modifier ses données personnelles | Moyenne |
-| A04 | Liste clients | Afficher tous les clients | Haute |
-| A05 | Créer client | Ajouter un nouveau client avec mot de passe temporaire | Haute |
-| A06 | Modifier client | Éditer les informations d'un client | Haute |
-| A07 | Supprimer client | Supprimer un client | Haute |
-| A08 | Activer/Désactiver | Changer le statut d'un client | Moyenne |
-| A09 | Voir détails client | Consulter le portefeuille d'un client | Moyenne |
-| A10 | Liste cryptos | Afficher toutes les crypto-monnaies et cours | Haute |
+| ID  | Fonctionnalité      | Description                                            | Priorité |
+| --- | ------------------- | ------------------------------------------------------ | -------- |
+| A01 | Authentification    | Connexion sécurisée avec email/mot de passe            | Haute    |
+| A02 | Tableau de bord     | Vue d'ensemble des statistiques                        | Haute    |
+| A03 | Gestion profil      | Modifier ses données personnelles                      | Moyenne  |
+| A04 | Liste clients       | Afficher tous les clients                              | Haute    |
+| A05 | Créer client        | Ajouter un nouveau client avec mot de passe temporaire | Haute    |
+| A06 | Modifier client     | Éditer les informations d'un client                    | Haute    |
+| A07 | Supprimer client    | Supprimer un client                                    | Haute    |
+| A08 | Activer/Désactiver  | Changer le statut d'un client                          | Moyenne  |
+| A09 | Voir détails client | Consulter le portefeuille d'un client                  | Moyenne  |
+| A10 | Liste cryptos       | Afficher toutes les crypto-monnaies et cours           | Haute    |
 
 ### 4.2 Fonctionnalités Client
 
-| ID | Fonctionnalité | Description | Priorité |
-|----|----------------|-------------|----------|
-| C01 | Inscription | Créer un compte avec email/mot de passe | Haute |
-| C02 | Authentification | Connexion sécurisée | Haute |
-| C03 | Tableau de bord | Vue portefeuille et statistiques | Haute |
-| C04 | Gestion profil | Modifier ses données personnelles | Moyenne |
-| C05 | Voir portefeuille | Afficher holdings et transactions | Haute |
-| C06 | Liste cryptos | Voir toutes les cryptos disponibles | Haute |
-| C07 | Détail crypto | Voir prix et graphique d'évolution | Haute |
-| C08 | Acheter crypto | Acheter une quantité au cours actuel | Haute |
-| C09 | Vendre crypto | Vendre ses cryptos et récupérer EUR | Haute |
-| C10 | Historique | Voir l'historique des transactions | Moyenne |
+| ID  | Fonctionnalité    | Description                             | Priorité |
+| --- | ----------------- | --------------------------------------- | -------- |
+| C01 | Inscription       | Créer un compte avec email/mot de passe | Haute    |
+| C02 | Authentification  | Connexion sécurisée                     | Haute    |
+| C03 | Tableau de bord   | Vue portefeuille et statistiques        | Haute    |
+| C04 | Gestion profil    | Modifier ses données personnelles       | Moyenne  |
+| C05 | Voir portefeuille | Afficher holdings et transactions       | Haute    |
+| C06 | Liste cryptos     | Voir toutes les cryptos disponibles     | Haute    |
+| C07 | Détail crypto     | Voir prix et graphique d'évolution      | Haute    |
+| C08 | Acheter crypto    | Acheter une quantité au cours actuel    | Haute    |
+| C09 | Vendre crypto     | Vendre ses cryptos et récupérer EUR     | Haute    |
+| C10 | Historique        | Voir l'historique des transactions      | Moyenne  |
 
 ---
 
@@ -309,15 +314,15 @@ Cryptocurrency "1" -- "*" Quote
 
 ### 6.1 Stack Technologique
 
-| Couche | Technologie | Version |
-|--------|-------------|---------|
-| **Backend** | PHP | 8.2+ |
-| **Framework** | Symfony | 7.x |
-| **Base de données** | MySQL | 8.0 |
-| **ORM** | Doctrine | 3.x |
-| **Frontend** | Twig + Bootstrap | 5.3 |
-| **Graphiques** | Chart.js | 4.x |
-| **Authentification** | Symfony Security | 7.x |
+| Couche               | Technologie      | Version |
+| -------------------- | ---------------- | ------- |
+| **Backend**          | PHP              | 8.2+    |
+| **Framework**        | Symfony          | 7.x     |
+| **Base de données**  | MySQL            | 8.0     |
+| **ORM**              | Doctrine         | 3.x     |
+| **Frontend**         | Twig + Bootstrap | 5.3     |
+| **Graphiques**       | Chart.js         | 4.x     |
+| **Authentification** | Symfony Security | 7.x     |
 
 ### 6.2 Architecture Multicouche
 
@@ -380,16 +385,19 @@ Cryptocurrency "1" -- "*" Quote
 ## 7. Besoins d'éco-conception
 
 ### 7.1 Optimisations Frontend
+
 - Minification CSS/JS en production
 - Lazy loading des images
 - Cache navigateur pour assets statiques
 
 ### 7.2 Optimisations Backend
+
 - Cache Symfony pour les requêtes fréquentes
 - Pagination des listes (éviter chargement massif)
 - Requêtes Doctrine optimisées (lazy loading)
 
 ### 7.3 Base de données
+
 - Index sur les colonnes fréquemment requêtées
 - Nettoyage périodique des anciennes cotations
 
@@ -399,28 +407,28 @@ Cryptocurrency "1" -- "*" Quote
 
 ### 8.1 Sécurité Frontend
 
-| Risque | Protection | Implémentation |
-|--------|------------|----------------|
-| XSS | Échappement automatique | Twig auto-escape |
-| CSRF | Tokens de validation | Symfony CSRF Component |
-| Clickjacking | Headers HTTP | X-Frame-Options |
+| Risque       | Protection              | Implémentation         |
+| ------------ | ----------------------- | ---------------------- |
+| XSS          | Échappement automatique | Twig auto-escape       |
+| CSRF         | Tokens de validation    | Symfony CSRF Component |
+| Clickjacking | Headers HTTP            | X-Frame-Options        |
 
 ### 8.2 Sécurité Backend
 
-| Risque | Protection | Implémentation |
-|--------|------------|----------------|
-| Injection SQL | Requêtes préparées | Doctrine ORM |
-| Authentification | Hashage sécurisé | bcrypt/argon2 |
-| Autorisation | Contrôle d'accès | Voters + IsGranted |
-| Session | Gestion sécurisée | Symfony Security |
+| Risque           | Protection         | Implémentation     |
+| ---------------- | ------------------ | ------------------ |
+| Injection SQL    | Requêtes préparées | Doctrine ORM       |
+| Authentification | Hashage sécurisé   | bcrypt/argon2      |
+| Autorisation     | Contrôle d'accès   | Voters + IsGranted |
+| Session          | Gestion sécurisée  | Symfony Security   |
 
 ### 8.3 Sécurité Base de Données
 
-| Risque | Protection | Implémentation |
-|--------|------------|----------------|
+| Risque             | Protection            | Implémentation            |
+| ------------------ | --------------------- | ------------------------- |
 | Accès non autorisé | Credentials sécurisés | Variables d'environnement |
-| Injection | ORM uniquement | Pas de SQL brut |
-| Données sensibles | Hashage mots de passe | UserPasswordHasher |
+| Injection          | ORM uniquement        | Pas de SQL brut           |
+| Données sensibles  | Hashage mots de passe | UserPasswordHasher        |
 
 ### 8.4 Bonnes Pratiques Appliquées
 
@@ -429,9 +437,9 @@ Cryptocurrency "1" -- "*" Quote
 3. **Gestion des erreurs** : Messages d'erreur génériques (pas de fuite d'information)
 4. **HTTPS** : Chiffrement des communications (à configurer en production)
 5. **Mots de passe** :
-   - Hashage avec algorithme moderne (bcrypt)
-   - Mots de passe temporaires générés aléatoirement
-   - Pas de stockage en clair
+    - Hashage avec algorithme moderne (bcrypt)
+    - Mots de passe temporaires générés aléatoirement
+    - Pas de stockage en clair
 
 ---
 

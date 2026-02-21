@@ -27,3 +27,12 @@
 ~$*
 ###< Word temporary files ###
 
+###> Fichiers personnels / sensibles ###
+/.claude/
+/CLAUDE.md
+/cookies.txt
+/login.html
+*.docx
+*.pdf
+###< Fichiers personnels / sensibles ###
+
