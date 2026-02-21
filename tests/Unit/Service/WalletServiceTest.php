@@ -10,18 +10,19 @@ use App\Repository\WalletRepository;
 use App\Service\CalculationService;
 use App\Service\WalletService;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 class WalletServiceTest extends TestCase
 {
     private WalletService $service;
-    private HoldingRepository $holdingRepository;
+    private Stub $holdingRepository;
 
     protected function setUp(): void
     {
-        $entityManager = $this->createMock(EntityManagerInterface::class);
-        $walletRepository = $this->createMock(WalletRepository::class);
-        $this->holdingRepository = $this->createMock(HoldingRepository::class);
+        $entityManager = $this->createStub(EntityManagerInterface::class);
+        $walletRepository = $this->createStub(WalletRepository::class);
+        $this->holdingRepository = $this->createStub(HoldingRepository::class);
         $calculationService = new CalculationService();
 
         $this->service = new WalletService(
